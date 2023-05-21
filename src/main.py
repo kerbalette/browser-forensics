@@ -2,12 +2,17 @@ import argparse, os
 from browser_forensics import chrome
 from browser_forensics import common_lib
 
-def main(profile_path):
+def main(argcmd, profile_path):
     if not profile_path.endswith('/'):
         profile_path = profile_path + '/'
 
     history_db = profile_path + 'History'
-    chrome.read_history(history_db)
+
+    if argcmd == "history":
+        chrome.read_history(history_db)
+
+    if argcmd == "downloads":
+        chrome.read_downloads(history_db)
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description='Browser Forensics Data Extractor')
@@ -29,5 +34,4 @@ if __name__ == "__main__":
     
     
     args = parser.parse_args()
-    if args.command == "history":
-        main(args.location)
+    main(args.command, args.location)

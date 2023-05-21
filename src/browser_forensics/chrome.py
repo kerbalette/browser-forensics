@@ -6,3 +6,10 @@ def read_history(history_db):
     for row in result:
         (Decoded_Visit_time, visit_duration, url, visit_count, Decoded_Last_Visit_Time) = row
         print (f"{Decoded_Visit_time}, {url}, {visit_count}")
+
+def read_downloads(history_db):
+    sql_cmd = "select datetime((start_time/1000000)-11644473600, 'unixepoch', 'localtime') AS timestamp, current_path, received_bytes, referrer, tab_url, mime_type FROM downloads ORDER BY timestamp DESC"
+    result = common_lib.fetch_db(history_db, sql_cmd)
+    for row in result:
+        (start_time, current_path, received_bytes, referrer, tab_url, mime_type) = row
+        print(f'{start_time}, {current_path}, {received_bytes}, {referrer}, {tab_url}, {mime_type}')
