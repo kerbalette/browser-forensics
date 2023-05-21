@@ -5,4 +5,4 @@ def read_history(history_db):
     result = common_lib.fetch_db(history_db, sql_cmd)
     for row in result:
         (Decoded_Visit_time, visit_duration, url, visit_count, Decoded_Last_Visit_Time) = row
-        print (f"Last Visited: {Decoded_Visit_time}, {url}")
+        print (f"{Decoded_Visit_time}, {url}, {visit_count}")
