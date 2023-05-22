@@ -14,6 +14,9 @@ def main(argcmd, profile_path):
     if argcmd == "downloads":
         chrome.read_downloads(history_db)
 
+    if argcmd == "search_terms":
+        chrome.read_search_terms(history_db)
+
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description='Browser Forensics Data Extractor')
 
@@ -28,6 +31,7 @@ if __name__ == "__main__":
     subparser = parser.add_subparsers(dest='command')
     subparser.add_parser('history')
     subparser.add_parser('downloads')
+    subparser.add_parser('search_terms')
 
     parser.add_argument('-b', '--browser', help='The Browser type: Chrome or Firefox', required=False, default="chrome")
     parser.add_argument('-l', '--location', help='Enter the location of browser profile', required=False, default=browser_profile_path )

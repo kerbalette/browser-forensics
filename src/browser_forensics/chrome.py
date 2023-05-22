@@ -13,3 +13,10 @@ def read_downloads(history_db):
     for row in result:
         (start_time, current_path, received_bytes, referrer, tab_url, mime_type) = row
         print(f'{start_time}, {current_path}, {received_bytes}, {referrer}, {tab_url}, {mime_type}')
+
+def read_search_terms(history_db):
+    sql_cmd = "SELECT urls.url AS search_url, keyword_search_terms.term FROM keyword_search_terms INNER JOIN urls on keyword_search_terms.url_id = urls.id"
+    result = common_lib.fetch_db(history_db, sql_cmd)
+    for row in result:
+        (search_url, term) = row
+        print(f'{search_url}, {term}')
