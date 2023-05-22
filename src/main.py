@@ -20,22 +20,22 @@ def main(argcmd, profile_path):
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description='Browser Forensics Data Extractor')
 
-    operating_system = common_lib.GetOSType()
-    user_home_folder = os.path.expanduser('~')
-
-    if operating_system == 'osx':
-        browser_profile_path = f'{user_home_folder}/Library/Application Support/Google/Chrome/Default/'
-    else:
-        browser_profile_path = f'C:\\Users\\{user_home_folder}\\AppData\\Local\\Google\\Chrome\\User Data\\Default\\'
+    parser.add_argument('-b', '--browsertype', help='The Browser type: Chrome or Firefox', required=False, default="chrome")
+    parser.add_argument('-l', '--location', help='Location of the Browser profile', required=False)
 
     subparser = parser.add_subparsers(dest='command')
     subparser.add_parser('history')
     subparser.add_parser('downloads')
     subparser.add_parser('search_terms')
 
-    parser.add_argument('-b', '--browser', help='The Browser type: Chrome or Firefox', required=False, default="chrome")
-    parser.add_argument('-l', '--location', help='Enter the location of browser profile', required=False, default=browser_profile_path )
-    
-    
     args = parser.parse_args()
-    main(args.command, args.location)
+    
+    if args.location is None:
+        browser_path = common_lib.get_default_browser_profile_path(common_lib.GetOSType(),args.browsertype)
+    else:
+        browser_path = args.location
+
+
+    main(args.command, browser_path)
+    
+
