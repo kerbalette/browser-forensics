@@ -1,22 +1,29 @@
-import argparse, os
+import argparse, os, importlib
 from browser_forensics import chrome
 from browser_forensics import common_lib
 
-def main(argcmd, profile_path):
-    if not profile_path.endswith('/'):
-        profile_path = profile_path + '/'
+def main(browsertype, argcmd, location, operating_system):
+    if browsertype == "chrome":
+        browser = importlib.import_module('browser_forensics.chrome')
 
-    history_db = profile_path + 'History'
+    if browsertype == "firefox":
+        browser = importlib.import_module('browser_forensics.firefox')
+    
+    if location is None:
+        browser_db = browser.get_default_browser_profile_path(operating_system)
+    else:
+        browser_db = location
 
     if argcmd == "history":
-        chrome.read_history(history_db)
+        browser.read_history(browser_db, operating_system)
 
     if argcmd == "downloads":
-        chrome.read_downloads(history_db)
-
+        browser.read_downloads(browser_db, operating_system)
+    
     if argcmd == "search_terms":
-        chrome.read_search_terms(history_db)
+        browser.read_search_terms(browser_db, operating_system)
 
+    
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description='Browser Forensics Data Extractor')
 
@@ -30,12 +37,6 @@ if __name__ == "__main__":
 
     args = parser.parse_args()
     
-    if args.location is None:
-        browser_path = common_lib.get_default_browser_profile_path(common_lib.GetOSType(),args.browsertype)
-    else:
-        browser_path = args.location
-
-
-    main(args.command, browser_path)
+    main(args.browsertype, args.command, args.location, common_lib.GetOSType())
     
 
